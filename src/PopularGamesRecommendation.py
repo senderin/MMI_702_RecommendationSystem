@@ -1,4 +1,4 @@
-from src.Dataframes import Dataframes
+from src.Data import Data
 
 
 class PopularGamesRecommendation():
@@ -6,7 +6,7 @@ class PopularGamesRecommendation():
     gameRating = None
 
     def __init__(self):
-        dfs = Dataframes.get_instance()
+        dfs = Data.get_instance()
         self.gameRating = dfs.game_ratings
 
     def get_most_played_games(self):

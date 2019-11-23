@@ -9,7 +9,7 @@ from surprise.model_selection import train_test_split
 from scipy.sparse import csr_matrix
 from sklearn.neighbors import NearestNeighbors, kneighbors_graph, KNeighborsClassifier
 from src.ContentBasedRecommendation import ContentBasedRecommendation
-from src.Dataframes import Dataframes
+from src.Data import Data
 from src.Evalution import Evaluation
 from src.PopularGamesRecommendation import PopularGamesRecommendation
 from src.RandomGamesRecommendation import RandomGamesRecommendation
@@ -36,7 +36,7 @@ def EvaluatePredictions():
 pd.set_option('max_columns', None)
 
 evaluation = Evaluation()
-dataframes = Dataframes.get_instance()
+dataframes = Data.get_instance()
 
 popular_rec = PopularGamesRecommendation()
 random_rec = RandomGamesRecommendation()
@@ -85,7 +85,7 @@ similar_rec = SimilarGamesRecommendation()
 #print()
 #
 #print('...content based games recommendation process...')
-#test['content_based_predictions'] = content_based_rec.recommend_for_user_set(test, 'short_description', is_plot=False)
+#test['content_based_predictions'] = content_based_rec.recommend_for_user_set(test, 'genres', is_plot=False)
 #print(test['content_based_predictions'])
 #print()
 #
@@ -99,17 +99,24 @@ similar_rec = SimilarGamesRecommendation()
 #content_based_predictions = test.content_based_predictions.values.tolist()
 #
 #print('Evaluating process is starting...')
+#precisions, average_precision = evaluation.precision(actual, content_based_predictions)
+#recall, average_recall = evaluation.recall(actual, content_based_predictions)
+#print('Average precision: {0}'.format(average_precision))
+#print('Average recall: {0}'.format(average_recall))
+#evaluation.plot_precision_recall(precisions, recall)
 #EvaluatePredictions()
 
 # end of evaluation part #
 
-content_based_rec.user_analysis(1)
+#content_based_rec.user_analysis(1)
 #content_based_rec.get_similar_games(name='spore')
 #content_based_rec.get_recommendations_with_tfidf('short_description', 'fallout 4')
 #content_based_rec.get_recommendations_with_count_matrix('short_description', 'fallout 4')
 #content_based_rec.get_recommendation_with_knn('portal 2')
 
-#cosine_sim, tfidf_matrix, features = content_based_rec.create_tfidf_matrix('genres', dataframes.played_games_info)
+
+#results = content_based_rec.KNN_4(tfidf_matrix, 13)
+#print(results)
 #print(tfidf_matrix.shape)
 #games = content_based_rec.get_recommend_for_user_with_knn(1)
 #cosine_sim2, tfidf_matrix2, features2 = content_based_rec.create_tfidf_matrix('genres', games)
@@ -124,6 +131,7 @@ content_based_rec.user_analysis(1)
 
 #games = content_based_rec.get_recommend_for_user_with_knn(1)
 #content_based_rec.KNN_3(dataframes.played_games_info, games, 'genres')
+content_based_rec.recommend_for_game("portal 2", 'Game_Name')
 
 plt.show()
 

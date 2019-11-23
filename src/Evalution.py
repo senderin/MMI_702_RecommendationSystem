@@ -1,6 +1,8 @@
 import numpy as np
+import pandas
 import recmetrics
 import matplotlib.pyplot as plt
+from statistics import mean
 
 class Evaluation():
 
@@ -85,6 +87,49 @@ class Evaluation():
             coverage_scores.append(self.CoverageMetric(prediction_list[index], catalog))
         print('coverage scores: {0}'.format(coverage_scores))
         self.PlotCoverageMetricResult(coverage_scores, names)
+
+    def precision(self, actual, predictions):
+        precisions = []
+        for index in range(len(predictions)):
+            intersect = len(self.intersection(predictions[index], actual[index]))
+            precision = intersect / len(predictions[index])
+            precisions.append(precision)
+            if precision == 0:
+                print('predictions {0}'.format(predictions[index]))
+                print('actuals {0}'.format(actual[index]))
+                print("intersect {0} - len(actual[index]) {1}".format(intersect, len(predictions[index])))
+                print()
+
+        return precisions, sum(precisions) / len(precisions)
+
+    def recall(self, actual, predictions):
+        recalls = []
+        for index in range(len(predictions)):
+            intersect = len(self.intersection(predictions[index], actual[index]))
+            recall = intersect / len(actual)
+            recalls.append(recall)
+        return recalls, sum(recalls) / len(recalls)
+
+    def plot_precision_recall(self, precisions, recalls):
+        plt.style.use('seaborn-whitegrid')
+        plt.figure()
+        plt.subplot(211)
+        plt.plot(precisions, color='tab:blue')
+
+        plt.subplot(212)
+        plt.plot(recalls, color='tab:orange')
+        plt.show()
+
+    def intersection(self, lst1, lst2):
+        return list(set(lst1) & set(lst2))
+
+    # weighted average of precision an recall
+    def F1_score(self, precision, recall):
+        return 2 * (precision * recall) / (precision + recall)
+
+
+
+
 
 
 

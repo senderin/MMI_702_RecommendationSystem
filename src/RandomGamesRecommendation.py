@@ -1,4 +1,4 @@
-from src.Dataframes import Dataframes
+from src.Data import Data
 
 
 class RandomGamesRecommendation():
@@ -6,7 +6,7 @@ class RandomGamesRecommendation():
     users_games = None
 
     def __init__(self):
-        dfs = Dataframes.get_instance()
+        dfs = Data.get_instance()
         self.users_games = dfs.users_games
 
     def recommend_for_user_set(self, test):

@@ -1,4 +1,4 @@
-from src.Dataframes import Dataframes
+from src.Data import Data
 import pandas as pd
 
 
@@ -8,7 +8,7 @@ class SimilarGamesRecommendation():
     game_id_name = None
 
     def __init__(self):
-        dfs = Dataframes.get_instance()
+        dfs = Data.get_instance()
         self.users_games = dfs.users_games
         self.game_id_name = dfs.game_id_name
 
