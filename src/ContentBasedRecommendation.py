@@ -21,157 +21,281 @@ from sklearn.pipeline import Pipeline
 from sklearn.preprocessing import MinMaxScaler
 from src.Data import Data
 import matplotlib.pyplot as plt
-from wordcloud import WordCloud, STOPWORDS
 
 
 class ContentBasedRecommendation():
-    played_games_info = None
-    users_games = None
-    dfs = None
-    played_games_info = None
-    game_name = None
-    column_name = None
+    data = None
+    playtime = None
+    game_id_name = None
+    steam_app_data = None
 
     def __init__(self):
-        self.dfs = Data.get_instance()
-        self.played_games_info = self.dfs.played_games_info
-        self.users_games = self.dfs.users_games
-        self.played_games_info = self.dfs.played_games_info
+        self.data = Data.get_instance()
+        self.playtime = self.data.playtime.copy()
+        self.game_id_name = self.data.game_id_name.copy()
+        self.steam_app_data = self.data.steam_app_data.copy()
 
-    def recommend_for_game(self, game_name, column_name):
-        self.game_name = game_name
-        self.column_name = column_name
-
-        print()
-        print('the game name: {0}'.format(self.game_name))
-        index = self.played_games_info.loc[self.played_games_info['Game_Name'] == self.game_name].index[0]
-        print('index of the game in original dataframe: {0}'.format(index))
-        #print(self.played_games_info[index - 5:index+5]['Game_Name'])
-        #print(self.played_games_info.tail(10)['Game_Name'])
-
-        self.dfs.games_info_10000.rename(columns={'name': 'Game_Name'}, inplace=True)
-        self.dfs.games_info_10000.rename(columns={'steam_appid': 'Game_ID'}, inplace=True)
-        df = self.preprocessing_column(self.played_games_info)
-
-        # word_count_matrix = self.word_count_matrix(df)
-        tfidf_matrix, features, pairwise_similarity = self.tfidf_matrix(df)
-        print('the shape of tfidf matrix: {0}'.format(tfidf_matrix.shape))
-
-        # show tfidf matrix
-        corpus_index = [n for n in df['Game_Name']]
-        temp_df = pd.DataFrame(tfidf_matrix.todense(), index=corpus_index, columns=features)
-        # print(temp_df[index - 5:index+5])
-        #print(temp_df.tail(10))
-
-        row = df.loc[df['Game_Name'] == self.game_name].index[0]
-        print(tfidf_matrix.getrow(row))
-        indices = np.nonzero(pairwise_similarity[65] > 0)
-        print(indices)
-        for i in range(len(indices)):
-             print(pairwise_similarity[65][indices[i]])
-             print(df['Game_Name'][indices[i]])
-
-        feature_index = tfidf_matrix[row, :].nonzero()[1]
-        print(feature_index)
-        tfidf_scores = zip(feature_index, [tfidf_matrix[row, x] for x in feature_index])
-        for w, s in [(features[i], s) for (i, s) in tfidf_scores]:
-            print(w, s)
-
-        knn = NearestNeighbors(n_neighbors=10, algorithm='brute', metric='cosine').fit(tfidf_matrix)
-        result = self.get_closest_neighs(knn, tfidf_matrix, df)
-        print(result)
-
-    def preprocessing_column(self, df):
-        print('Before preprocessing:')
-        #print(df[self.column_name].tail(20))
-        print(df.shape)
-        df[self.column_name] = df[self.column_name].fillna('')
+    def preprocess(self, df, column_name):
+        #print('shape before process {0}'.format(df.shape))
+        df.reset_index()
+        df[column_name] = df[column_name].fillna('')
         # Convert text to lowercase
-        df[self.column_name] = [str(i).lower() for i in df[self.column_name]]
+        df[column_name] = [str(i).lower() for i in df[column_name]]
         # Remove numbers
-        # df[self.column_name] = [re.sub(r'\d+', '', str(i)) for i in df[self.column_name]]
+        # df[column_name] = [re.sub(r'\d+', '', str(i)) for i in df[column_name]]
         # Remove whitespaces
-        df[self.column_name] = [str(i).strip() for i in df[self.column_name]]
+        df[column_name] = [str(i).strip() for i in df[column_name]]
         # Remove html tags
-        df[self.column_name] = [self.clean_html_tags(str(i)) for i in df[self.column_name]]
+        df[column_name] = [self.clean_html_tags(str(i)) for i in df[column_name]]
         # Remove punctuation
-        df[self.column_name] = [str(i).translate(str.maketrans('', '', string.punctuation)) for i in df[self.column_name]]
-        print('\nAfter preprocessing:')
-        #print(df[self.column_name].tail(20))
-        print(df.shape)
-        return df
+        df[column_name] = [str(i).translate(str.maketrans('', '', string.punctuation)) for i in df[column_name]]
+        #print('shape after process {0}'.format(df.shape))
+        # print(df.head(10))
 
     def clean_html_tags(self, text):
         cleanr = re.compile('<.*?>')
         cleantext = re.sub(cleanr, ' ', text)
         return cleantext
 
+    def recommend_for_game(self, game_name, metadata_name):
+        df = self.game_id_name.loc[self.game_id_name['Game_Name'].isin(self.steam_app_data['Game_Name'])]
+        # print('shape after intersection {0}'.format(df.shape))
+        df = pd.merge(df, self.steam_app_data, on='Game_Name')
+        # print('shape after merge {0}'.format(df.shape))
 
-    def word_count_matrix(self, df):
-        # Extract text for a particular person
-        text = df.loc[df['Game_Name'] == self.game_name]
-        # Define the count vectorizer that will be used to process the data
-        count_vectorizer = CountVectorizer(stop_words = "english")
-        # Apply this vectorizer to text to get a sparse matrix of counts
-        count_matrix = count_vectorizer.fit_transform(text[self.column_name])
-        # Get the names of the features
-        features = count_vectorizer.get_feature_names()
-        # Create a series from the sparse matrix
-        d = pd.Series(count_matrix.toarray().flatten(),
-                      index=features).sort_values(ascending=False)
+        print()
+        #game_name = 'portal 2'
+        game_name = game_name.lower().replace('[{}]'.format(string.punctuation), ' ').strip('®').strip('™')
+        index = df.loc[df['Game_Name'] == game_name].index[0]
+        column_name = metadata_name
+        self.preprocess(df, column_name)
 
-        ax = d[:10].plot(kind='bar', figsize=(10, 6), width=.8, fontsize=14, rot=90,
-                         title='Word Counts')
-        ax.title.set_size(18)
-        plt.show()
+        count_vect = CountVectorizer(stop_words="english")
+        X_train_counts = count_vect.fit_transform(df[column_name])
 
-        return count_matrix
+        tfidf_transformer = TfidfTransformer()
+        X_train_tfidf = tfidf_transformer.fit_transform(X_train_counts)
 
-    def plot_tfidf(self, tfidf_matrix, features, row):
-        # Create a series from the sparse matrix
-        d = pd.Series(tfidf_matrix.getrow(row).toarray().flatten(), index=features).sort_values(ascending=False)
-        print(d.head(10))
+        neigh = NearestNeighbors(algorithm='brute', metric='cosine', n_neighbors=10, n_jobs=-1)
+        neigh.fit(X_train_tfidf)
 
-        ax = d[:20].plot(kind='bar', title='TF-IDF Values',
-                         figsize=(10, 6), width=.8, fontsize=14, rot=90)
-        ax.title.set_size(20)
-        plt.show()
+        test = df.loc[[index]]
+        X_test_counts = count_vect.transform(test[column_name])
+        X_test_tfidf = tfidf_transformer.transform(X_test_counts)
+        distances, indices = neigh.kneighbors(X_test_tfidf)
 
-    def tfidf_matrix(self, df):
-        # Define the TFIDF vectorizer that will be used to process the data
-        tfidf_vectorizer = TfidfVectorizer(stop_words = "english")
-        # Apply this vectorizer to the full dataset to create normalized vectors
-        tfidf_matrix = tfidf_vectorizer.fit_transform(df[self.column_name])
-        # Get the names of the features
-        features = tfidf_vectorizer.get_feature_names()
-        #print(features)
-        pairwise_similarity = (tfidf_matrix * tfidf_matrix.T).toarray()
-        np.fill_diagonal(pairwise_similarity, 0)
-        print(pairwise_similarity)
-
-        return tfidf_matrix, features, pairwise_similarity
-
-    def get_closest_neighs(self, knn, tfidf_matrix, df):
-        row = df.loc[df['Game_Name'] == self.game_name].index[0]
-
-        distances, indices = knn.kneighbors(tfidf_matrix.getrow(row))
-        print(indices.flatten())
-        for i in range(0, len(distances.flatten())):
-            if (i == 0):
-                print('recommended for : {0} -- {1}'.format(df.index[row],
-                                                            df['Game_Name'][indices.flatten()[i]]))
-            else:
-                print("{0} -- {1} -- {2}".format(df.index[indices.flatten()[i]],
-                                                 df['Game_Name'][indices.flatten()[i]], distances.flatten()[i]))
-
-        distances, indices = knn.kneighbors(tfidf_matrix.getrow(row))
-        print(indices.flatten())
-        names_similar = pd.Series(indices.flatten()).map(df['Game_Name'])
-        print(df['Game_Name'][indices.flatten()])
-        ids_similar = pd.Series(indices.flatten()).map(df['Game_ID'])
+        names_similar = pd.Series(indices.flatten()).map(df['Game_Name']).values.tolist()
+        ids_similar = self.data.played_games.loc[self.data.played_games['Game_Name'].isin(names_similar)]['Game_ID']
         result = pd.DataFrame({'distance': distances.flatten(), 'index': indices.flatten(), 'name': names_similar})
+        result = result.iloc[1:]
+        # print(result)
 
-        return result
+        return ids_similar, names_similar
+
+    def recommend_for_user_set(self, test, type_name, is_plot):
+        pass
+
+    def recommend_for_user(self, played_games, column_name):
+        pool = self.create_pool(most_played_games, cosine_sim)
+        if not len(pool) == 0:
+            predictions_name = random.sample(pool, 10)
+            predictions_id = self.played_games_info.loc[self.played_games_info['Game_Name'].isin(predictions_name)]['Game_ID'].values.tolist()
+        else:
+            predictions_id = [0] * 10
+
+        return predictions_id
+        return self.recommend_for_game('portal 2', column_name)
+
+    def recommend_with_all_metadata(self, played_games):
+        all_text_data = self.text_data_of_games(self.data.played_games)
+        self.preprocess(all_text_data, 'text')
+        played_text_data = self.text_data_of_games(played_games)
+        self.preprocess(played_text_data, 'text')
+
+        indexes = []
+        for index, row in played_games.iterrows():
+            index = self.data.played_games.loc[self.data.played_games['Game_Name'] == row['Game_Name']].index[0]
+            indexes.append(index)
+
+        count_vect = CountVectorizer(stop_words="english")
+        X_train_counts = count_vect.fit_transform(all_text_data['text'])
+
+        tfidf_transformer = TfidfTransformer()
+        X_train_tfidf = tfidf_transformer.fit_transform(X_train_counts)
+
+        neigh = NearestNeighbors(algorithm='brute', metric='cosine', n_neighbors=11, n_jobs=-1)
+        neigh.fit(X_train_tfidf)
+
+        results = pd.DataFrame()
+        for i in range(len(indexes)):
+            test = played_text_data.loc[[i]]
+            X_test_counts = count_vect.transform(test['text'])
+            X_test_tfidf = tfidf_transformer.transform(X_test_counts)
+            distances, indices = neigh.kneighbors(X_test_tfidf)
+
+            names = pd.Series(indices.flatten()).map(self.data.played_games['Game_Name']).values.tolist()
+            ids = self.data.played_games.loc[self.data.played_games['Game_Name'].isin(names)]['Game_ID']
+            result = pd.DataFrame({'distance': distances.flatten(), 'index': indices.flatten(), 'name': names})
+            result = result.iloc[1:]
+            results = results.append(result, ignore_index=True)
+
+        if not len(results) == 0:
+            predictions_name = results.sample(n=10)['name'].values.tolist()
+            predictions_id = self.data.played_games.loc[self.data.played_games['Game_Name'].isin(predictions_name)]['Game_ID'].values.tolist()
+        else:
+            predictions_id = [0] * 10
+            predictions_name = [''] * 10
+
+        print(predictions_name)
+
+        return predictions_id, predictions_name
+
+    def text_data_of_games(self, games_info):
+        text = []
+        for index, game in games_info.iterrows():
+            line = game["short_description"] + game["about_the_game"] + game["detailed_description"]
+            text.append(line)
+            #print(line)
+
+        temp = pd.DataFrame()
+        temp['text'] = text
+        #print(temp.head())
+        return temp
+
+#   def recommend_for_game(self, game_name, column_name):
+#       self.game_name = game_name
+#       self.column_name = column_name
+
+#       print()
+#       print('the game name: {0}'.format(self.game_name))
+#       index = self.played_games_info.loc[self.played_games_info['Game_Name'] == self.game_name].index[0]
+#       print('index of the game in original dataframe: {0}'.format(index))
+#       #print(self.played_games_info[index - 5:index+5]['Game_Name'])
+#       #print(self.played_games_info.tail(10)['Game_Name'])
+
+#       self.dfs.games_info_10000.rename(columns={'name': 'Game_Name'}, inplace=True)
+#       self.dfs.games_info_10000.rename(columns={'steam_appid': 'Game_ID'}, inplace=True)
+#       df = self.preprocessing_column(self.played_games_info)
+
+#       # word_count_matrix = self.word_count_matrix(df)
+#       tfidf_matrix, features, pairwise_similarity = self.tfidf_matrix(df)
+#       print('the shape of tfidf matrix: {0}'.format(tfidf_matrix.shape))
+
+#       # show tfidf matrix
+#       corpus_index = [n for n in df['Game_Name']]
+#       temp_df = pd.DataFrame(tfidf_matrix.todense(), index=corpus_index, columns=features)
+#       # print(temp_df[index - 5:index+5])
+#       #print(temp_df.tail(10))
+
+#       row = df.loc[df['Game_Name'] == self.game_name].index[0]
+#       print(tfidf_matrix.getrow(row))
+#       indices = np.nonzero(pairwise_similarity[65] > 0)
+#       print(indices)
+#       for i in range(len(indices)):
+#            print(pairwise_similarity[65][indices[i]])
+#            print(df['Game_Name'][indices[i]])
+
+#       feature_index = tfidf_matrix[row, :].nonzero()[1]
+#       print(feature_index)
+#       tfidf_scores = zip(feature_index, [tfidf_matrix[row, x] for x in feature_index])
+#       for w, s in [(features[i], s) for (i, s) in tfidf_scores]:
+#           print(w, s)
+
+#       knn = NearestNeighbors(n_neighbors=10, algorithm='brute', metric='cosine').fit(tfidf_matrix)
+#       result = self.get_closest_neighs(knn, tfidf_matrix, df)
+#       print(result)
+
+#   def preprocessing_column(self, df):
+#       print('Before preprocessing:')
+#       #print(df[self.column_name].tail(20))
+#       print(df.shape)
+#       df[self.column_name] = df[self.column_name].fillna('')
+#       # Convert text to lowercase
+#       df[self.column_name] = [str(i).lower() for i in df[self.column_name]]
+#       # Remove numbers
+#       # df[self.column_name] = [re.sub(r'\d+', '', str(i)) for i in df[self.column_name]]
+#       # Remove whitespaces
+#       df[self.column_name] = [str(i).strip() for i in df[self.column_name]]
+#       # Remove html tags
+#       df[self.column_name] = [self.clean_html_tags(str(i)) for i in df[self.column_name]]
+#       # Remove punctuation
+#       df[self.column_name] = [str(i).translate(str.maketrans('', '', string.punctuation)) for i in df[self.column_name]]
+#       print('\nAfter preprocessing:')
+#       #print(df[self.column_name].tail(20))
+#       print(df.shape)
+#       return df
+
+#   def clean_html_tags(self, text):
+#       cleanr = re.compile('<.*?>')
+#       cleantext = re.sub(cleanr, ' ', text)
+#       return cleantext
+
+
+#   def word_count_matrix(self, df):
+#       # Extract text for a particular person
+#       text = df.loc[df['Game_Name'] == self.game_name]
+#       # Define the count vectorizer that will be used to process the data
+#       count_vectorizer = CountVectorizer(stop_words = "english")
+#       # Apply this vectorizer to text to get a sparse matrix of counts
+#       count_matrix = count_vectorizer.fit_transform(text[self.column_name])
+#       # Get the names of the features
+#       features = count_vectorizer.get_feature_names()
+#       # Create a series from the sparse matrix
+#       d = pd.Series(count_matrix.toarray().flatten(),
+#                     index=features).sort_values(ascending=False)
+
+#       ax = d[:10].plot(kind='bar', figsize=(10, 6), width=.8, fontsize=14, rot=90,
+#                        title='Word Counts')
+#       ax.title.set_size(18)
+#       plt.show()
+
+#       return count_matrix
+
+#   def plot_tfidf(self, tfidf_matrix, features, row):
+#       # Create a series from the sparse matrix
+#       d = pd.Series(tfidf_matrix.getrow(row).toarray().flatten(), index=features).sort_values(ascending=False)
+#       print(d.head(10))
+
+#       ax = d[:20].plot(kind='bar', title='TF-IDF Values',
+#                        figsize=(10, 6), width=.8, fontsize=14, rot=90)
+#       ax.title.set_size(20)
+#       plt.show()
+
+#   def tfidf_matrix(self, df):
+#       # Define the TFIDF vectorizer that will be used to process the data
+#       tfidf_vectorizer = TfidfVectorizer(stop_words = "english")
+#       # Apply this vectorizer to the full dataset to create normalized vectors
+#       tfidf_matrix = tfidf_vectorizer.fit_transform(df[self.column_name])
+#       # Get the names of the features
+#       features = tfidf_vectorizer.get_feature_names()
+#       #print(features)
+#       pairwise_similarity = (tfidf_matrix * tfidf_matrix.T).toarray()
+#       np.fill_diagonal(pairwise_similarity, 0)
+#       print(pairwise_similarity)
+
+#       return tfidf_matrix, features, pairwise_similarity
+
+#   def get_closest_neighs(self, knn, tfidf_matrix, df):
+#       row = df.loc[df['Game_Name'] == self.game_name].index[0]
+
+#       distances, indices = knn.kneighbors(tfidf_matrix.getrow(row))
+#       print(indices.flatten())
+#       for i in range(0, len(distances.flatten())):
+#           if (i == 0):
+#               print('recommended for : {0} -- {1}'.format(df.index[row],
+#                                                           df['Game_Name'][indices.flatten()[i]]))
+#           else:
+#               print("{0} -- {1} -- {2}".format(df.index[indices.flatten()[i]],
+#                                                df['Game_Name'][indices.flatten()[i]], distances.flatten()[i]))
+
+#       distances, indices = knn.kneighbors(tfidf_matrix.getrow(row))
+#       print(indices.flatten())
+#       names_similar = pd.Series(indices.flatten()).map(df['Game_Name'])
+#       print(df['Game_Name'][indices.flatten()])
+#       ids_similar = pd.Series(indices.flatten()).map(df['Game_ID'])
+#       result = pd.DataFrame({'distance': distances.flatten(), 'index': indices.flatten(), 'name': names_similar})
+
+#       return result
 
     # most played game name kısmı
     # def KNN_4(self, tfidf, user_id):
@@ -213,15 +337,7 @@ class ContentBasedRecommendation():
 #
     #    return recommendations
 #
-    #def create_pool(self, most_played_games, cosine_sim):
-    #    recommendationPool = []
-    #    for index, row in most_played_games.iterrows():
-    #        contentbased_predictions = self.recommend_game_tfidf(row['Game_Name'], cosine_sim)
-    #        if not len(contentbased_predictions) == 0:
-    #            recommendationPool.extend(contentbased_predictions)
-    #    # print(recommendationPool)
-    #    return recommendationPool
-#
+
     #def create_count_matrix(self, column_name):
     #    # new columns
     #    self.played_games_info['keywords'] = ""
@@ -303,12 +419,7 @@ class ContentBasedRecommendation():
 #
     #    return predictions_id
 #
-    #def plot_user_preferences(self, genre_list, cat_list):
-    #    line = str(genre_list).replace("'", '').replace('[', '').replace(']', '').replace(' ', '')
-    #    pd.Series(line.split(',')).value_counts().plot(kind='bar')
-    #    line = str(cat_list).replace("'", '').replace('[', '').replace(']', '').replace(' ', '')
-    #    pd.Series(line.split(',')).value_counts().plot(kind='bar')
-#
+
     #def recommend_for_user_set(self, test, column_name, is_plot):
     #    cosine_sim, matrix, features = self.create_tfidf_matrix(column_name)
     #    total = len(test)
@@ -348,14 +459,7 @@ class ContentBasedRecommendation():
 #
     #    print(user_info.head(10))
 #
-    #def plot_word_cloud(self, data):
-    #    wordcloud = WordCloud(background_color="white", stopwords=set(STOPWORDS))
-    #    word_could_dict = Counter(data)
-    #    wordcloud.generate_from_frequencies(word_could_dict)
-    #    plt.figure(figsize=(5, 3))
-    #    plt.imshow(wordcloud, interpolation="bilinear")
-    #    plt.axis("off")
-    #    plt.show()
+
 #
     #def recommend_for_game(self, name):
     #    # initializing the empty list of recommended games

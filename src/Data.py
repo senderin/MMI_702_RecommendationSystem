@@ -51,7 +51,7 @@ class Data():
         self.steam_app_data.rename(columns={'steam_appid': 'Game_ID'}, inplace=True)
         self.steam_app_data.drop_duplicates(subset="Game_Name", keep=False, inplace=True)
         self.steam_app_data.drop_duplicates(subset="Game_ID", keep=False, inplace=True)
-        self.process_categories_and_genres(self.steam_app_data)
+        self.steam_app_data = self.process_categories_and_genres(self.steam_app_data)
         self.preprocessing_column(self.steam_app_data, 'Game_Name')
 
     def preprocess_game_id_name(self):
@@ -70,7 +70,9 @@ class Data():
         self.playtime = self.playtime.loc[self.playtime['Game_ID'].isin(self.game_id_name['Game_ID'])]
 
     def get_users_games_df(self):
-        return pd.merge(self.game_id_name, self.playtime, on='Game_ID')
+        temp = pd.merge(self.game_id_name, self.playtime, on='Game_ID')
+        temp = temp.groupby('User_ID').filter(lambda x: len(x) > 10)
+        return temp
 
     def get_played_games_df(self):
         played_games = self.game_id_name.loc[self.game_id_name['Game_Name'].isin(self.steam_app_data['Game_Name'])]
@@ -127,11 +129,13 @@ class Data():
         return gameRating
 
     def process_categories_and_genres(self, df):
+        df = df.copy()
         df = df[(df['categories'].notnull()) & (df['genres'].notnull())]
 
         for col in ['categories', 'genres']:
-            value = df[col].apply(lambda x: ','.join(item['description'] for item in literal_eval(x)))
-            df.loc[df[col] == value]
+            df[col] = df[col].apply(lambda x: ';'.join(item['description'] for item in literal_eval(x)))
+
+        return df
 
     def plot_long_tail(self, dataframe, column_id, interaction_type):
         # long tail example

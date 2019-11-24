@@ -9,8 +9,8 @@ class SimilarGamesRecommendation():
 
     def __init__(self):
         dfs = Data.get_instance()
-        self.users_games = dfs.users_games
-        self.game_id_name = dfs.game_id_name
+        self.users_games = dfs.users_games.copy()
+        self.game_id_name = dfs.game_id_name.copy()
 
     def get_similar_games(self, game_name):
         # user - game matrix
@@ -21,8 +21,15 @@ class SimilarGamesRecommendation():
         corr_contact = pd.DataFrame(similar_to_X, columns=['Correlation'])
         # drop those null values
         corr_contact.dropna(inplace=True)
-        print(corr_contact.sort_values('Correlation', ascending=False).head(10))
+        corr_contact = corr_contact.sort_values('Correlation', ascending=False).head(10)
+        print(corr_contact)
         return corr_contact
+
+    def recommend_for_game(self, game_name):
+        game_name = str.lower(game_name)
+        similarity_recs = self.get_similar_games(game_name).merge(self.game_id_name, on='Game_Name').head(10)
+        names = similarity_recs['Game_Name'].values.tolist()
+        return names
 
     def recommend_for_user_set(self, test, game_name):
         game_name = str.lower(game_name)

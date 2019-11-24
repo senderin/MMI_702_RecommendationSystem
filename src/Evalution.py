@@ -88,7 +88,7 @@ class Evaluation():
         print('coverage scores: {0}'.format(coverage_scores))
         self.PlotCoverageMetricResult(coverage_scores, names)
 
-    def precision(self, actual, predictions):
+    def precision_for_predictions(self, actual, predictions):
         precisions = []
         for index in range(len(predictions)):
             intersect = len(self.intersection(predictions[index], actual[index]))
@@ -102,13 +102,23 @@ class Evaluation():
 
         return precisions, sum(precisions) / len(precisions)
 
-    def recall(self, actual, predictions):
+    def precision(self, actual, prediction):
+        intersect = len(self.intersection(prediction, actual))
+        precision = intersect / len(prediction)
+        return precision
+
+    def recall_for_predictions(self, actual, predictions):
         recalls = []
         for index in range(len(predictions)):
             intersect = len(self.intersection(predictions[index], actual[index]))
             recall = intersect / len(actual)
             recalls.append(recall)
         return recalls, sum(recalls) / len(recalls)
+
+    def recall(self, actual, prediction):
+        intersect = len(self.intersection(prediction, actual))
+        recall = intersect / len(actual)
+        return recall
 
     def plot_precision_recall(self, precisions, recalls):
         plt.style.use('seaborn-whitegrid')
@@ -124,7 +134,7 @@ class Evaluation():
         return list(set(lst1) & set(lst2))
 
     # weighted average of precision an recall
-    def F1_score(self, precision, recall):
+    def f1_score(self, precision, recall):
         return 2 * (precision * recall) / (precision + recall)
 
 
