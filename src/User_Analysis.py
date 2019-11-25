@@ -27,11 +27,16 @@ class User_Analysis():
         self.game_ids = self.user_info['Game_ID'].tolist()
         self.games_info = self.data.played_games.loc[self.data.played_games['Game_ID'].isin(self.game_ids)]
 
-    def get_actual_list(self):
+    def get_actual_id_list(self):
         grouped = self.users.groupby('User_ID')
         #print(grouped.head(10))
         ids = grouped.get_group(self.user_id)['Game_ID'].values.tolist()
         return ids
+
+    def get_actual_name_list(self):
+        ids = self.get_actual_id_list()
+        names = self.data.played_games.loc[self.data.played_games['Game_ID'].isin(ids)]['Game_Name'].values.tolist()
+        return names
 
     def create_users_df(self):
         temp = self.data.users_games.copy()
@@ -44,7 +49,7 @@ class User_Analysis():
         cat_list =  self.games_info['categories'].tolist()
         genre_list = self.games_info['genres'].tolist()
 
-        most_played_3_games = self.get_most_played_N_games(3)
+        most_played_3_games = self.get_most_played_N_games(10)
 
         genre_value_counts, cat_value_counts = self.plot_genre_cat_preferences(genre_list, cat_list)
 
@@ -79,7 +84,6 @@ class User_Analysis():
         plt.axis("off")
         plt.show()
 
-
     def get_most_played_N_games(self, N):
         games = self.user_info.sort_values(by=['Hours']).tail(N)
         return self.data.played_games.loc[self.data.played_games['Game_ID'].isin(games['Game_ID'])]
@@ -97,6 +101,8 @@ class User_Analysis():
         #pd.Series(categories).value_counts().plot(kind='bar')
 
         return  pd.Series(genres).value_counts(), pd.Series(categories).value_counts()
+
+
 
 
 

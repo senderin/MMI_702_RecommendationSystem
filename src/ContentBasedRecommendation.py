@@ -63,8 +63,6 @@ class ContentBasedRecommendation():
         df = pd.merge(df, self.steam_app_data, on='Game_Name')
         # print('shape after merge {0}'.format(df.shape))
 
-        print()
-        #game_name = 'portal 2'
         game_name = game_name.lower().replace('[{}]'.format(string.punctuation), ' ').strip('®').strip('™')
         index = df.loc[df['Game_Name'] == game_name].index[0]
         column_name = metadata_name
@@ -76,7 +74,7 @@ class ContentBasedRecommendation():
         tfidf_transformer = TfidfTransformer()
         X_train_tfidf = tfidf_transformer.fit_transform(X_train_counts)
 
-        neigh = NearestNeighbors(algorithm='brute', metric='cosine', n_neighbors=10, n_jobs=-1)
+        neigh = NearestNeighbors(algorithm='brute', metric='cosine', n_neighbors=11, n_jobs=-1)
         neigh.fit(X_train_tfidf)
 
         test = df.loc[[index]]
@@ -85,8 +83,10 @@ class ContentBasedRecommendation():
         distances, indices = neigh.kneighbors(X_test_tfidf)
 
         names_similar = pd.Series(indices.flatten()).map(df['Game_Name']).values.tolist()
-        ids_similar = self.data.played_games.loc[self.data.played_games['Game_Name'].isin(names_similar)]['Game_ID']
+        ids_similar = self.data.played_games.loc[self.data.played_games['Game_Name'].isin(names_similar)]['Game_ID'].values.tolist()
         result = pd.DataFrame({'distance': distances.flatten(), 'index': indices.flatten(), 'name': names_similar})
+        names_similar.pop(0)
+        ids_similar.pop(0)
         result = result.iloc[1:]
         # print(result)
 
@@ -96,15 +96,20 @@ class ContentBasedRecommendation():
         pass
 
     def recommend_for_user(self, played_games, column_name):
-        pool = self.create_pool(most_played_games, cosine_sim)
+        pool = []
+        for index, row in played_games.iterrows():
+            ids_similar, names_similar = self.recommend_for_game(row['Game_Name'], column_name)
+            pool.extend(names_similar)
+
+        predictions_id = []
+        predictions_name = []
         if not len(pool) == 0:
             predictions_name = random.sample(pool, 10)
-            predictions_id = self.played_games_info.loc[self.played_games_info['Game_Name'].isin(predictions_name)]['Game_ID'].values.tolist()
+            predictions_id = self.data.played_games.loc[self.data.played_games['Game_Name'].isin(predictions_name)]['Game_ID'].values.tolist()
         else:
             predictions_id = [0] * 10
 
-        return predictions_id
-        return self.recommend_for_game('portal 2', column_name)
+        return predictions_id, predictions_name
 
     def recommend_with_all_metadata(self, played_games):
         all_text_data = self.text_data_of_games(self.data.played_games)
@@ -145,8 +150,6 @@ class ContentBasedRecommendation():
         else:
             predictions_id = [0] * 10
             predictions_name = [''] * 10
-
-        print(predictions_name)
 
         return predictions_id, predictions_name
 

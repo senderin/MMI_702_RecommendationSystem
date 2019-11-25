@@ -101,6 +101,7 @@ def ask_metadata():
     print('2. Short description')
     print('3. Detailed description')
     print('4. About the game')
+    print('5. All metadata')
     type = int(input('Enter the metadata number to be used in content-based rec. model: '))
     type_name = ''
     if type == 1:
@@ -111,6 +112,8 @@ def ask_metadata():
         type_name = 'detailed_description'
     elif type == 4:
         type_name = 'about_the_game'
+    elif type == 5:
+        type_name = 'all_metadata'
     return type_name
 
 
@@ -132,7 +135,16 @@ choose = int(input('Enter your choose number: '))
 if choose == 1:
     game_name = input('Enter name of the game: ')
     metadata_name = ask_metadata()
-    cb_names = content_based_rec.recommend_for_game(game_name, metadata_name)
+
+    cb_ids = []
+    cb_names = []
+    if not metadata_name is 'all_metadata':
+        cb_ids, cb_names = content_based_rec.recommend_for_game(game_name, metadata_name)
+
+    else:
+        played_games = data.played_games.loc[data.played_games['Game_Name'] == game_name]
+        cb_ids, cb_names = content_based_rec.recommend_with_all_metadata(played_games)
+
     names = similar_rec.recommend_for_game(game_name)
 
     temp = pd.DataFrame()
@@ -140,14 +152,21 @@ if choose == 1:
     temp['Sim. Rec. List'] = names
     print(temp.head(10))
 
+    data.find_users_played_X(game_name, cb_ids, cb_names)
+
 elif choose == 2:
     user_id = np.random.choice(data.users_games['User_ID'].unique())
+    print('Recommendation for User ID {0}:'.format(user_id))
     user_analysis = User_Analysis(user_id)
     user_analysis.user_profile_description()
 
-    played_games = user_analysis.get_most_played_N_games(1)
+    played_games = user_analysis.get_most_played_N_games(10)
+    print(played_games['Game_Name'])
+    temp = pd.DataFrame()
+    temp['Game Names'] = user_analysis.get_actual_name_list()
+    temp['Game IDs'] = user_analysis.get_actual_id_list()
+    print(temp.head())
 
-    print('Recommendation for User ID {0}:'.format(user_id))
     r_ids, r_names = random_rec.recommend_for_user()
     p_ids, p_names = popular_rec.recommend_for_user()
     cb_ids_1, cb_names_1 = content_based_rec.recommend_for_user(played_games, 'short_description')
@@ -156,43 +175,47 @@ elif choose == 2:
     cb_ids_4, cb_names_4 = content_based_rec.recommend_with_all_metadata(played_games)
 
     temp = pd.DataFrame()
-    temp['CB Rec. List (short_description)'] = cb_names_1
-    print(len(temp['CB Rec. List (short_description)']))
-    temp['CB Rec. List (detailed_description)'] = cb_names_2
-    temp['CB Rec. List (about_the_game)'] = cb_names_3
-    temp['CB Rec. List (user_analysis)'] = cb_names_4
-    temp['Random Rec. List'] = r_names
-    temp['Popular Rec. List'] = p_names
+    temp['CB Rec. List (short_description)'] = cb_ids_1
+    temp['CB Rec. List (detailed_description)'] = cb_ids_2
+    temp['CB Rec. List (about_the_game)'] = cb_ids_3
+    temp['CB Rec. List (user_analysis)'] = cb_ids_4
+    temp['Random Rec. List'] = r_ids
+    temp['Popular Rec. List'] = p_ids
     print(temp.head(10))
 
     precisions = []
     recalls = []
-    actual = user_analysis.get_actual_list()
+    actual = user_analysis.get_actual_id_list()
 
     print('For random rec. model: ')
     p, r = precision_recall(actual, r_ids)
     precisions.append(p)
     recalls.append(r)
+    print()
 
     print('For popular rec. model: ')
     p, r = precision_recall(actual, p_ids)
     precisions.append(p)
     recalls.append(r)
+    print()
 
     print('For cb rec. model (short_description): ')
     p, r = precision_recall(actual, cb_ids_1)
     precisions.append(p)
     recalls.append(r)
+    print()
 
     print('For cb rec. model (detailed_description): ')
     p, r = precision_recall(actual, cb_ids_2)
     precisions.append(p)
     recalls.append(r)
+    print()
 
     print('For cb rec. model (about_the_game): ')
     p, r = precision_recall(actual, cb_ids_3)
     precisions.append(p)
     recalls.append(r)
+    print()
 
     print('For cb rec. model (all metadata): ')
     p, r = precision_recall(actual, cb_ids_4

@@ -194,6 +194,70 @@ class Data():
         # rating_matrix = self.game_ratings.pivot_table(index='average_hours', columns='number_of_player', values='rating').fillna(0)
         # sns.heatmap(rating_matrix, annot=True)
 
+    def find_users_played_X(self, game_name, rec_list_id, rec_list_name):
+        game_id = self.played_games.loc[self.played_games['Game_Name'] == game_name]['Game_ID']
+        print(game_id)
+
+        temp = self.users_games.copy()
+        temp = temp.groupby('User_ID').filter(lambda x: len(x) > 2)
+        temp.drop("Hours", inplace=True, axis=1)
+
+        grouped = temp.groupby('User_ID')
+
+        users = pd.DataFrame()
+        users['User_ID'] = self.users_games['User_ID'].unique()
+
+        id_list = []
+        name_list = []
+        for index, row in users.iterrows():
+            user_id = row['User_ID']
+            ids = grouped.get_group(user_id)['Game_ID'].values.tolist()
+            names = grouped.get_group(user_id)['Game_Name'].values.tolist()
+            id_list.append(ids)
+            name_list.append(names)
+
+        users['Game_Name'] = name_list
+        users['Game_ID'] = id_list
+        # print(users.head(10))
+
+        ids = [game_id]
+        users_played_X = pd.DataFrame()
+        for index, row in users.iterrows():
+            if any(game_name in s for s in row.Game_Name):
+                users_played_X = users_played_X.append(row, ignore_index=True)
+
+        # print(users_played_X.head(10))
+
+        precisions = 0
+        recalls = 0
+        for index, row in users_played_X.iterrows():
+            intersect = len(self.intersection(rec_list_id, row['Game_ID']))
+            precision = self.precision(row['Game_ID'], rec_list_id)
+            precisions = precisions + precision
+            recall = self.recall(row['Game_ID'], rec_list_id)
+            recalls = recalls + recall
+            print('I: {2} P: {0} R: {1}'.format(precision, recall, intersect))
+
+        print('Average P: {0} Average R: {1}'.format(precisions/len(users_played_X), recalls/len(users_played_X)))
+
+    def intersection(self, lst1, lst2):
+        return list(set(lst1) & set(lst2))
+
+    def recall(self, actual, prediction):
+        intersect = len(self.intersection(prediction, actual))
+        recall = intersect / len(actual)
+        return recall
+
+    def precision(self, actual, prediction):
+        intersect = len(self.intersection(prediction, actual))
+        precision = intersect / len(prediction)
+        return precision
+
+    # weighted average of precision an recall
+    def f1_score(self, precision, recall):
+        return 2 * (precision * recall) / (precision + recall)
+
+
 
 #data = Data.get_instance()
 #print(data.playtime)
