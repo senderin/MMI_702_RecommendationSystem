@@ -1,8 +1,13 @@
+import numpy
 import numpy as np
 import pandas
 import recmetrics
 import matplotlib.pyplot as plt
 from statistics import mean
+import pandas as pd
+
+from src.Data import Data
+
 
 class Evaluation():
 
@@ -111,7 +116,8 @@ class Evaluation():
         recalls = []
         for index in range(len(predictions)):
             intersect = len(self.intersection(predictions[index], actual[index]))
-            recall = intersect / len(actual)
+            # '- 1' presents the game that is used for recommendation
+            recall = intersect / (len(actual) - 1)
             recalls.append(recall)
         return recalls, sum(recalls) / len(recalls)
 
@@ -136,6 +142,96 @@ class Evaluation():
     # weighted average of precision an recall
     def f1_score(self, precision, recall):
         return 2 * (precision * recall) / (precision + recall)
+
+    def evaluate_recommendations(self, game_name, rec_list_id, rec_list_name, show_all):
+        evaluation = Evaluation()
+        users_played_X = self.find_users_played_X(game_name)
+        print('# of players that use the game: {0}'.format(len(users_played_X)))
+        precisions = 0
+        recalls = 0
+        if users_played_X.shape[0] > 0:
+            for index, row in users_played_X.iterrows():
+                intersect = len(evaluation.intersection(rec_list_name, row['Game_Name']))
+                precision = evaluation.precision(row['Game_ID'], rec_list_id)
+                precisions = precisions + precision
+                recall = evaluation.recall(row['Game_ID'], rec_list_id)
+                recalls = recalls + recall
+                if show_all:
+                    print(row['Game_Name'])
+                    print('I: {2} P: {0} R: {1}'.format(precision, recall, intersect))
+
+        average_precision = precisions/len(users_played_X)
+        average_recall = recalls/len(users_played_X)
+        print('Average P: {0} Average R: {1}'.format(average_precision, average_recall))
+        if average_recall > 0:
+            f1_score = self.f1_score(average_precision, average_recall)
+            print('Average F1 score: {0}'.format(f1_score))
+        return average_precision, average_recall
+
+
+    def find_users_played_X(self, game_name):
+        data = Data.get_instance()
+        game_id = data.played_games.loc[data.played_games['Game_Name'] == game_name]['Game_ID']
+        # print(game_id)
+
+        temp = data.users_games.copy()
+        temp = temp.groupby('User_ID').filter(lambda x: len(x) > 2)
+        temp.drop("Hours", inplace=True, axis=1)
+
+        grouped = temp.groupby('User_ID')
+
+        users = pd.DataFrame()
+        users['User_ID'] = data.users_games['User_ID'].unique()
+
+        id_list = []
+        name_list = []
+        for index, row in users.iterrows():
+            user_id = row['User_ID']
+            ids = grouped.get_group(user_id)['Game_ID'].values.tolist()
+            names = grouped.get_group(user_id)['Game_Name'].values.tolist()
+            # print(names)
+            id_list.append(ids)
+            name_list.append(names)
+
+        users['Game_Name'] = name_list
+        users['Game_ID'] = id_list
+        # print(users.head(10))
+
+        ids = [game_id]
+        users_played_X = pd.DataFrame()
+        for index, row in users.iterrows():
+            if any(game_name in s for s in row.Game_Name):
+                users_played_X = users_played_X.append(row, ignore_index=True)
+
+        # print(users_played_X.head(10))
+        return users_played_X
+
+    def plot_precision_recall_bar_chart(self, precisions, recalls, titles):
+        # create plot
+        fig, ax = plt.subplots()
+        n_groups = len(precisions)
+        index = numpy.arange(n_groups)
+        bar_width = 0.35
+        opacity = 0.8
+
+        rects1 = plt.bar(index, precisions, bar_width,
+                         alpha=opacity,
+                         color='b',
+                         label='precision')
+
+        rects2 = plt.bar(index + bar_width, recalls, bar_width,
+                         alpha=opacity,
+                         color='g',
+                         label='recall')
+
+        plt.xlabel('Rec. Models')
+        plt.ylabel('Scores')
+        plt.title('Precision-Recall of Rec. Models')
+        plt.xticks(index + bar_width, (titles), rotation=90)
+        plt.legend()
+
+        plt.tight_layout()
+        plt.show()
 
 
 
