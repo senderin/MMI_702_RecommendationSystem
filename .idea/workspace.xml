@@ -2,15 +2,8 @@
 <project version="4">
   <component name="ChangeListManager">
     <list default="true" id="458e7f5f-f363-439d-8fc1-92067f220e35" name="Default Changelist" comment="">
-      <change beforePath="$PROJECT_DIR$/.idea/workspace.xml" beforeDir="false" afterPath="$PROJECT_DIR$/.idea/workspace.xml" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/src/ContentBasedRecommendation.py" beforeDir="false" afterPath="$PROJECT_DIR$/src/ContentBasedRecommendation.py" afterDir="false" />
       <change beforePath="$PROJECT_DIR$/src/Data.py" beforeDir="false" afterPath="$PROJECT_DIR$/src/Data.py" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/src/Evalution.py" beforeDir="false" afterPath="$PROJECT_DIR$/src/Evalution.py" afterDir="false" />
       <change beforePath="$PROJECT_DIR$/src/Main.py" beforeDir="false" afterPath="$PROJECT_DIR$/src/Main.py" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/src/PopularGamesRecommendation.py" beforeDir="false" />
-      <change beforePath="$PROJECT_DIR$/src/RandomGamesRecommendation.py" beforeDir="false" />
-      <change beforePath="$PROJECT_DIR$/src/SimilarGamesRecommendation.py" beforeDir="false" />
-      <change beforePath="$PROJECT_DIR$/src/User_Analysis.py" beforeDir="false" />
     </list>
     <option name="EXCLUDED_CONVERTED_TO_IGNORED" value="true" />
     <option name="SHOW_DIALOG" value="false" />
@@ -20,11 +13,11 @@
   </component>
   <component name="FileEditorManager">
     <leaf SIDE_TABS_SIZE_LIMIT_KEY="300">
-      <file pinned="false" current-in-tab="true">
+      <file pinned="false" current-in-tab="false">
         <entry file="file://$PROJECT_DIR$/src/Main.py">
           <provider selected="true" editor-type-id="text-editor">
-            <state relative-caret-position="47">
-              <caret line="76" selection-start-line="76" selection-end-line="76" />
+            <state relative-caret-position="162">
+              <caret line="65" selection-start-line="65" selection-end-line="65" />
               <folding>
                 <element signature="e#0#19#0" expanded="true" />
               </folding>
@@ -32,11 +25,11 @@
           </provider>
         </entry>
       </file>
-      <file pinned="false" current-in-tab="false">
+      <file pinned="false" current-in-tab="true">
         <entry file="file://$PROJECT_DIR$/src/ContentBasedRecommendation.py">
           <provider selected="true" editor-type-id="text-editor">
-            <state relative-caret-position="1188">
-              <caret line="129" column="13" selection-start-line="129" selection-start-column="13" selection-end-line="129" selection-end-column="13" />
+            <state relative-caret-position="1">
+              <caret line="53" selection-start-line="53" selection-end-line="53" />
               <folding>
                 <element signature="e#0#9#0" expanded="true" />
               </folding>
@@ -45,10 +38,19 @@
         </entry>
       </file>
       <file pinned="false" current-in-tab="false">
+        <entry file="file://$PROJECT_DIR$/src/DatasetGenerator.py">
+          <provider selected="true" editor-type-id="text-editor">
+            <state relative-caret-position="609">
+              <caret line="251" column="67" selection-start-line="251" selection-start-column="50" selection-end-line="251" selection-end-column="67" />
+            </state>
+          </provider>
+        </entry>
+      </file>
+      <file pinned="false" current-in-tab="false">
         <entry file="file://$PROJECT_DIR$/src/Data.py">
           <provider selected="true" editor-type-id="text-editor">
-            <state relative-caret-position="2785">
-              <caret line="194" column="48" selection-start-line="194" selection-start-column="48" selection-end-line="194" selection-end-column="48" />
+            <state relative-caret-position="84">
+              <caret line="44" column="45" selection-start-line="44" selection-start-column="45" selection-end-line="44" selection-end-column="45" />
               <folding>
                 <element signature="e#0#9#0" expanded="true" />
               </folding>
@@ -59,7 +61,7 @@
       <file pinned="false" current-in-tab="false">
         <entry file="file://$PROJECT_DIR$/src/Evalution.py">
           <provider selected="true" editor-type-id="text-editor">
-            <state relative-caret-position="-762">
+            <state relative-caret-position="2295">
               <caret line="153" column="85" selection-start-line="153" selection-start-column="85" selection-end-line="153" selection-end-column="85" />
               <folding>
                 <element signature="e#0#12#0" expanded="true" />
@@ -83,8 +85,8 @@
       <file pinned="false" current-in-tab="false">
         <entry file="file://$PROJECT_DIR$/src/game_id_name.csv">
           <provider selected="true" editor-type-id="csv-text-editor">
-            <state relative-caret-position="123">
-              <caret line="194" column="15" selection-start-line="194" selection-start-column="8" selection-end-line="194" selection-end-column="15" />
+            <state relative-caret-position="10">
+              <caret line="612" column="4" lean-forward="true" selection-start-line="612" selection-start-column="4" selection-end-line="612" selection-end-column="18" />
             </state>
           </provider>
           <provider editor-type-id="csv-table-editor">
@@ -144,6 +146,7 @@
       <find>1197</find>
       <find>stanley</find>
       <find>rot</find>
+      <find>counter</find>
     </findStrings>
     <replaceStrings>
       <replace />
@@ -164,18 +167,19 @@
         <option value="$PROJECT_DIR$/src/RandomGamesRecommendation.py" />
         <option value="$PROJECT_DIR$/src/playtime.csv" />
         <option value="$PROJECT_DIR$/src/User_Analysis.py" />
-        <option value="$PROJECT_DIR$/src/Data.py" />
         <option value="$PROJECT_DIR$/src/SimilarGamesRecommendation.py" />
-        <option value="$PROJECT_DIR$/src/ContentBasedRecommendation.py" />
         <option value="$PROJECT_DIR$/src/Evalution.py" />
+        <option value="$PROJECT_DIR$/src/Data.py" />
+        <option value="$PROJECT_DIR$/src/ContentBasedRecommendation.py" />
         <option value="$PROJECT_DIR$/src/Main.py" />
       </list>
     </option>
   </component>
-  <component name="ProjectFrameBounds" extendedState="6">
-    <option name="y" value="23" />
-    <option name="width" value="1131" />
-    <option name="height" value="830" />
+  <component name="ProjectFrameBounds">
+    <option name="x" value="505" />
+    <option name="y" value="59" />
+    <option name="width" value="935" />
+    <option name="height" value="794" />
   </component>
   <component name="ProjectView">
     <navigator proportions="" version="1">
@@ -302,15 +306,14 @@
     <servers />
   </component>
   <component name="ToolWindowManager">
-    <frame x="0" y="23" width="1440" height="830" extended-state="6" />
-    <editor active="true" />
+    <frame x="505" y="59" width="935" height="794" extended-state="0" />
     <layout>
-      <window_info content_ui="combo" id="Project" order="0" visible="true" weight="0.16701902" />
+      <window_info content_ui="combo" id="Project" order="0" visible="true" weight="0.25929978" />
       <window_info id="Structure" order="1" side_tool="true" weight="0.25" />
       <window_info id="Favorites" order="2" side_tool="true" />
       <window_info anchor="bottom" id="Message" order="0" />
       <window_info anchor="bottom" id="Find" order="1" weight="0.32384825" />
-      <window_info active="true" anchor="bottom" id="Run" order="2" visible="true" weight="0.5298103" />
+      <window_info anchor="bottom" id="Run" order="2" weight="0.95726496" />
       <window_info anchor="bottom" id="Debug" order="3" weight="0.4" />
       <window_info anchor="bottom" id="Cvs" order="4" weight="0.25" />
       <window_info anchor="bottom" id="Inspection" order="5" weight="0.4" />
@@ -405,16 +408,6 @@
         </state>
       </provider>
     </entry>
-    <entry file="file://$PROJECT_DIR$/src/Data.py">
-      <provider selected="true" editor-type-id="text-editor">
-        <state relative-caret-position="2785">
-          <caret line="194" column="48" selection-start-line="194" selection-start-column="48" selection-end-line="194" selection-end-column="48" />
-          <folding>
-            <element signature="e#0#9#0" expanded="true" />
-          </folding>
-        </state>
-      </provider>
-    </entry>
     <entry file="file://$PROJECT_DIR$/src/app_list.csv">
       <provider selected="true" editor-type-id="csv-text-editor">
         <state relative-caret-position="19635">
@@ -435,42 +428,12 @@
         <state showInfoPanel="true" fixedHeaders="false" rowLines="3" />
       </provider>
     </entry>
-    <entry file="file://$PROJECT_DIR$/src/game_id_name.csv">
-      <provider selected="true" editor-type-id="csv-text-editor">
-        <state relative-caret-position="123">
-          <caret line="194" column="15" selection-start-line="194" selection-start-column="8" selection-end-line="194" selection-end-column="15" />
-        </state>
-      </provider>
-      <provider editor-type-id="csv-table-editor">
-        <state showInfoPanel="true" fixedHeaders="false" rowLines="3" />
-      </provider>
-    </entry>
     <entry file="file://$PROJECT_DIR$/src/User_Analysis.py">
       <provider selected="true" editor-type-id="text-editor">
         <state relative-caret-position="-982">
           <caret line="23" column="43" selection-start-line="23" selection-start-column="43" selection-end-line="23" selection-end-column="43" />
           <folding>
             <element signature="e#0#31#0" expanded="true" />
-          </folding>
-        </state>
-      </provider>
-    </entry>
-    <entry file="file://$PROJECT_DIR$/src/Evalution.py">
-      <provider selected="true" editor-type-id="text-editor">
-        <state relative-caret-position="-762">
-          <caret line="153" column="85" selection-start-line="153" selection-start-column="85" selection-end-line="153" selection-end-column="85" />
-          <folding>
-            <element signature="e#0#12#0" expanded="true" />
-          </folding>
-        </state>
-      </provider>
-    </entry>
-    <entry file="file://$PROJECT_DIR$/src/ContentBasedRecommendation.py">
-      <provider selected="true" editor-type-id="text-editor">
-        <state relative-caret-position="1188">
-          <caret line="129" column="13" selection-start-line="129" selection-start-column="13" selection-end-line="129" selection-end-column="13" />
-          <folding>
-            <element signature="e#0#9#0" expanded="true" />
           </folding>
         </state>
       </provider>
@@ -482,12 +445,59 @@
         </state>
       </provider>
     </entry>
+    <entry file="file://$PROJECT_DIR$/src/DatasetGenerator.py">
+      <provider selected="true" editor-type-id="text-editor">
+        <state relative-caret-position="609">
+          <caret line="251" column="67" selection-start-line="251" selection-start-column="50" selection-end-line="251" selection-end-column="67" />
+        </state>
+      </provider>
+    </entry>
+    <entry file="file://$PROJECT_DIR$/src/Evalution.py">
+      <provider selected="true" editor-type-id="text-editor">
+        <state relative-caret-position="2295">
+          <caret line="153" column="85" selection-start-line="153" selection-start-column="85" selection-end-line="153" selection-end-column="85" />
+          <folding>
+            <element signature="e#0#12#0" expanded="true" />
+          </folding>
+        </state>
+      </provider>
+    </entry>
+    <entry file="file://$PROJECT_DIR$/src/Data.py">
+      <provider selected="true" editor-type-id="text-editor">
+        <state relative-caret-position="84">
+          <caret line="44" column="45" selection-start-line="44" selection-start-column="45" selection-end-line="44" selection-end-column="45" />
+          <folding>
+            <element signature="e#0#9#0" expanded="true" />
+          </folding>
+        </state>
+      </provider>
+    </entry>
     <entry file="file://$PROJECT_DIR$/src/Main.py">
       <provider selected="true" editor-type-id="text-editor">
-        <state relative-caret-position="47">
-          <caret line="76" selection-start-line="76" selection-end-line="76" />
+        <state relative-caret-position="162">
+          <caret line="65" selection-start-line="65" selection-end-line="65" />
           <folding>
             <element signature="e#0#19#0" expanded="true" />
+          </folding>
+        </state>
+      </provider>
+    </entry>
+    <entry file="file://$PROJECT_DIR$/src/game_id_name.csv">
+      <provider selected="true" editor-type-id="csv-text-editor">
+        <state relative-caret-position="10">
+          <caret line="612" column="4" lean-forward="true" selection-start-line="612" selection-start-column="4" selection-end-line="612" selection-end-column="18" />
+        </state>
+      </provider>
+      <provider editor-type-id="csv-table-editor">
+        <state showInfoPanel="true" fixedHeaders="false" rowLines="3" />
+      </provider>
+    </entry>
+    <entry file="file://$PROJECT_DIR$/src/ContentBasedRecommendation.py">
+      <provider selected="true" editor-type-id="text-editor">
+        <state relative-caret-position="1">
+          <caret line="53" selection-start-line="53" selection-end-line="53" />
+          <folding>
+            <element signature="e#0#9#0" expanded="true" />
           </folding>
         </state>
       </provider>

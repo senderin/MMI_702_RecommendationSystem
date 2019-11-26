@@ -40,6 +40,10 @@ class Data():
         self.users_games = self.get_users_games_df()
         self.game_ratings = self.calculate_game_ratings()
 
+        print(len(self.steam_app_data))
+        print(len(self.played_games))
+        print(len(self.users_games['User_ID']))
+
     def read_csvs(self):
         # reading datasets
         self.game_id_name = pd.read_csv('game_id_name.csv')
@@ -72,7 +76,7 @@ class Data():
 
     def get_users_games_df(self):
         temp = pd.merge(self.game_id_name, self.playtime, on='Game_ID')
-        temp = temp.groupby('User_ID').filter(lambda x: len(x) > 10)
+        temp = temp.groupby('User_ID').filter(lambda x: len(x) > 2)
         return temp
 
     def get_played_games_df(self):

@@ -63,29 +63,29 @@ def rec_for_game(game_name):
 
     return precisions, recalls
 
-#game_name = input('Enter name of the game: ')
-#rec_for_game(game_name)
+game_name = input('Enter name of the game: ')
+rec_for_game(game_name)
 
-random_games = data.played_games.Game_Name.sample(1).values.tolist()
-print(random_games)
-precisions = []
-recalls = []
-for i in range(len(random_games)):
-    precision, recall = rec_for_game(random_games[i])
-    precisions.append(precision)
-    recalls.append(recall)
-
-p_name  = mean([x[0] for x in precisions])
-p_short_desc = mean([x[1] for x in precisions])
-p_detailed = mean([x[2] for x in precisions])
-p_about = mean([x[3] for x in precisions])
-p_all = mean([x[4] for x in precisions])
-
-print(p_name)
-print(p_short_desc)
-print(p_detailed)
-print(p_about)
-print(p_all)
+#random_games = data.played_games.Game_Name.sample(1).values.tolist()
+#print(random_games)
+#precisions = []
+#recalls = []
+#for i in range(len(random_games)):
+#    precision, recall = rec_for_game(random_games[i])
+#    precisions.append(precision)
+#    recalls.append(recall)
+#
+#p_name  = mean([x[0] for x in precisions])
+#p_short_desc = mean([x[1] for x in precisions])
+#p_detailed = mean([x[2] for x in precisions])
+#p_about = mean([x[3] for x in precisions])
+#p_all = mean([x[4] for x in precisions])
+#
+#print(p_name)
+#print(p_short_desc)
+#print(p_detailed)
+#print(p_about)
+#print(p_all)
 
 
 
