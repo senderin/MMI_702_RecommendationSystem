@@ -40,9 +40,9 @@ class Data():
         self.users_games = self.get_users_games_df()
         self.game_ratings = self.calculate_game_ratings()
 
-        print(len(self.steam_app_data))
-        print(len(self.played_games))
-        print(len(self.users_games['User_ID']))
+        #print(len(self.steam_app_data))
+        #print(len(self.played_games))
+        #print(len(self.users_games['User_ID']))
 
     def read_csvs(self):
         # reading datasets

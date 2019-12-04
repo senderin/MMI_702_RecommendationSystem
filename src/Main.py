@@ -1,5 +1,8 @@
 import pandas as pd
 from numpy import mean
+from wordcloud import WordCloud
+import matplotlib.pyplot as plt
+
 from src.ContentBasedRecommendation import ContentBasedRecommendation
 from src.Data import Data
 from src.Evalution import Evaluation
@@ -23,6 +26,7 @@ data = Data.get_instance()
 content_based_rec = ContentBasedRecommendation()
 
 def rec_for_game(game_name):
+
     cb_ids_name, cb_names_name = get_rec_for(game_name, 'Game_Name')
     cb_ids_short_desc, cb_names_short_desc = get_rec_for(game_name, 'short_description')
     cb_ids_detailed_desc, cb_names_detailed_desc = get_rec_for(game_name, 'detailed_description')
@@ -58,7 +62,7 @@ def rec_for_game(game_name):
     precisions = (p_name, p_short_desc, p_detailed_desc, p_about, p_all)
     recalls = (r_name, r_short_desc, r_detailed_desc, r_about, r_all)
 
-    titles = ('CB Rec.(Game_Name)', 'CB Rec.(short_description)', 'CB Rec.(detailed_description)', 'CB Rec.(about_the_game)','CB Rec.(all_metadata)')
+    titles = ('(Game_Name)', '(short_description)', '(detailed_description)', '(about_the_game)','(all_metadata)')
     evaluation.plot_precision_recall_bar_chart(precisions, recalls, titles)
 
     return precisions, recalls
@@ -66,7 +70,7 @@ def rec_for_game(game_name):
 game_name = input('Enter name of the game: ')
 rec_for_game(game_name)
 
-#random_games = data.played_games.Game_Name.sample(1).values.tolist()
+#random_games = data.played_games.Game_Name.sample(150).values.tolist()
 #print(random_games)
 #precisions = []
 #recalls = []
@@ -81,11 +85,28 @@ rec_for_game(game_name)
 #p_about = mean([x[3] for x in precisions])
 #p_all = mean([x[4] for x in precisions])
 #
-#print(p_name)
-#print(p_short_desc)
-#print(p_detailed)
-#print(p_about)
-#print(p_all)
+#print('Average Precision (Game Name) : {0}'.format(p_name))
+#print('Average Precision (Short Description) : {0}'.format(p_short_desc))
+#print('Average Precision (Detailed Description) : {0}'.format(p_detailed))
+#print('Average Precision (About the Game) : {0}'.format(p_about))
+#print('Average Precision (All Metadata) : {0}'.format(p_all))
+#
+#r_name  = mean([x[0] for x in recalls])
+#r_short_desc = mean([x[1] for x in recalls])
+#r_detailed = mean([x[2] for x in recalls])
+#r_about = mean([x[3] for x in recalls])
+#r_all = mean([x[4] for x in recalls])
+#
+#print('Average Recall (Game Name) : {0}'.format(r_name))
+#print('Average Recall (Short Description) : {0}'.format(r_short_desc))
+#print('Average Recall (Detailed Description) : {0}'.format(r_detailed))
+#print('Average Recall (About the Game) : {0}'.format(r_about))
+#print('Average Recall (All Metadata) : {0}'.format(r_all))
+#
+#titles = ('(Game_Name)', '(short_description)', '(detailed_description)', '(about_the_game)','(all_metadata)')
+#precisions = (p_name, p_short_desc, p_detailed, p_about, p_all)
+#recalls = (r_name, r_short_desc, r_detailed, r_about, r_all)
+#evaluation.plot_precision_recall_bar_chart(precisions, recalls, titles)
 
 
 

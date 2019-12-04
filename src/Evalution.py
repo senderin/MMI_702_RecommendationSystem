@@ -141,12 +141,12 @@ class Evaluation():
 
     # weighted average of precision an recall
     def f1_score(self, precision, recall):
-        return 2 * (precision * recall) / (precision + recall)
+        return 0.2 * (precision * recall) / (precision + recall)
 
     def evaluate_recommendations(self, game_name, rec_list_id, rec_list_name, show_all):
         evaluation = Evaluation()
         users_played_X = self.find_users_played_X(game_name)
-        print('# of players that use the game: {0}'.format(len(users_played_X)))
+        print('# of players that play the game: {0}'.format(len(users_played_X)))
         precisions = 0
         recalls = 0
         if users_played_X.shape[0] > 0:
