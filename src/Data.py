@@ -76,7 +76,7 @@ class Data():
 
     def get_users_games_df(self):
         temp = pd.merge(self.game_id_name, self.playtime, on='Game_ID')
-        temp = temp.groupby('User_ID').filter(lambda x: len(x) > 2)
+        temp = temp.groupby('User_ID').filter(lambda x: len(x) > 12)
         return temp
 
     def get_played_games_df(self):

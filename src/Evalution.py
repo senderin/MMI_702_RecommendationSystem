@@ -8,7 +8,6 @@ import pandas as pd
 
 from src.Data import Data
 
-
 class Evaluation():
 
     # mar@k evaluation metric
@@ -232,6 +231,15 @@ class Evaluation():
 
         plt.tight_layout()
         plt.show()
+
+    def precision_recall(self, actual, prediction):
+        precision = self.precision(actual, prediction)
+        recall = self.recall(actual, prediction)
+        print('Precision: {0}'.format(precision))
+        print('Recall: {0}'.format(recall))
+        if not recall == 0:
+            print('F1 Score: {0}'.format(self.f1_score(precision, recall)))
+        return precision, recall
 
 
 
