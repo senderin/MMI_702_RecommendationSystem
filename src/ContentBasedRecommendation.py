@@ -81,14 +81,46 @@ class ContentBasedRecommendation():
 
         return ids_similar, names_similar
 
-    def recommend_with_all_metadata(self, played_games):
+    def recommend_for_gameset(self, game_set, metadata_name):
+        df = self.data.played_games.copy()
+        df = df.loc[~df['Game_Name'].isin(game_set['Game_Name'])]
+        df.reset_index(inplace=True)
+
+        column_name = metadata_name
+        self.preprocess(df, column_name)
+
+        count_vect = CountVectorizer(stop_words="english", ngram_range=(1,3))
+        train_counts = count_vect.fit_transform(df[column_name])
+
+        tfidf_transformer = TfidfTransformer()
+        train_tfidf = tfidf_transformer.fit_transform(train_counts)
+
+        neigh = NearestNeighbors(algorithm='brute', metric='cosine', n_neighbors=10, n_jobs=-1)
+        neigh.fit(train_tfidf)
+
+        test_counts = count_vect.transform(game_set[column_name])
+        test_tfidf = tfidf_transformer.transform(test_counts)
+        distances, indices = neigh.kneighbors(test_tfidf)
+
+        names = pd.Series(indices.flatten()).map(df['Game_Name']).values.tolist()
+        ids = pd.Series(indices.flatten()).map(df['Game_ID']).values.tolist()
+        result = pd.DataFrame({'distance': distances.flatten(), 'index': indices.flatten(), 'name': names, 'id' : ids})
+        result = result.sort_values(by='distance', ascending=True).head(10)
+
+        print()
+        print(metadata_name)
+        print(result)
+
+        return result
+
+    def recommend_with_all_metadata(self, played_game):
         all_text_data = self.text_data_of_games(self.data.played_games)
         self.preprocess(all_text_data, 'text')
-        played_text_data = self.text_data_of_games(played_games)
+        played_text_data = self.text_data_of_games(played_game)
         self.preprocess(played_text_data, 'text')
 
         indexes = []
-        for index, row in played_games.iterrows():
+        for index, row in played_game.iterrows():
             index = self.data.played_games.loc[self.data.played_games['Game_Name'] == row['Game_Name']].index[0]
             indexes.append(index)
 
@@ -114,18 +146,54 @@ class ContentBasedRecommendation():
             ids = self.data.played_games.loc[self.data.played_games['Game_Name'].isin(names)]['Game_ID']
             result = pd.DataFrame({'distance': distances.flatten(), 'index': indices.flatten(), 'name': names})
             result = result.iloc[1:]
-            results = results.append(result, ignore_index=True)
             print('all_metadata')
-            print(results.head(10))
+            print(result.head(10))
 
-        if not len(results) == 0:
-            predictions_name = results.sample(n=10)['name'].values.tolist()
+        if not len(result) == 0:
+            predictions_name = result
             predictions_id = self.data.played_games.loc[self.data.played_games['Game_Name'].isin(predictions_name)]['Game_ID'].values.tolist()
         else:
             predictions_id = [0] * 10
             predictions_name = [''] * 10
 
         return predictions_id, predictions_name
+
+    def recommend_all_metadata(self, played_games):
+        df = self.data.played_games.copy()
+        df = df.loc[~df['Game_Name'].isin(played_games['Game_Name'])]
+        df.reset_index(inplace=True)
+
+        all_text_data = self.text_data_of_games(df)
+        self.preprocess(all_text_data, 'text')
+        played_text_data = self.text_data_of_games(played_games)
+        self.preprocess(played_text_data, 'text')
+
+        count_vect = CountVectorizer(stop_words="english", ngram_range=(1,3))
+        train_counts = count_vect.fit_transform(all_text_data['text'])
+
+        tfidf_transformer = TfidfTransformer()
+        train_tfidf = tfidf_transformer.fit_transform(train_counts)
+
+        neigh = NearestNeighbors(algorithm='brute', metric='cosine', n_neighbors=10, n_jobs=-1)
+        neigh.fit(train_tfidf)
+
+        test = played_text_data
+        test_counts = count_vect.transform(test['text'])
+        test_tfidf = tfidf_transformer.transform(test_counts)
+        features = count_vect.get_feature_names()
+
+        distances, indices = neigh.kneighbors(test_tfidf)
+
+        names = pd.Series(indices.flatten()).map(df['Game_Name']).values.tolist()
+        ids = pd.Series(indices.flatten()).map(df['Game_ID']).values.tolist()
+        result = pd.DataFrame({'distance': distances.flatten(), 'index': indices.flatten(), 'name': names, 'id' : ids})
+        result = result.sort_values(by='distance', ascending=True).head(10)
+
+        print()
+        print('all_metadata')
+        print(result)
+
+        return result
 
     def text_data_of_games(self, games_info):
         text = []

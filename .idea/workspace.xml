@@ -2,13 +2,9 @@
 <project version="4">
   <component name="ChangeListManager">
     <list default="true" id="458e7f5f-f363-439d-8fc1-92067f220e35" name="Default Changelist" comment="">
-      <change afterPath="$PROJECT_DIR$/src/user_analysis.py" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/.idea/workspace.xml" beforeDir="false" afterPath="$PROJECT_DIR$/.idea/workspace.xml" afterDir="false" />
       <change beforePath="$PROJECT_DIR$/src/ContentBasedRecommendation.py" beforeDir="false" afterPath="$PROJECT_DIR$/src/ContentBasedRecommendation.py" afterDir="false" />
       <change beforePath="$PROJECT_DIR$/src/Data.py" beforeDir="false" afterPath="$PROJECT_DIR$/src/Data.py" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/src/Evalution.py" beforeDir="false" afterPath="$PROJECT_DIR$/src/Evalution.py" afterDir="false" />
       <change beforePath="$PROJECT_DIR$/src/Main.py" beforeDir="false" afterPath="$PROJECT_DIR$/src/Main.py" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/src/RecommendationOperations.py" beforeDir="false" />
     </list>
     <option name="EXCLUDED_CONVERTED_TO_IGNORED" value="true" />
     <option name="SHOW_DIALOG" value="false" />
@@ -18,11 +14,11 @@
   </component>
   <component name="FileEditorManager">
     <leaf SIDE_TABS_SIZE_LIMIT_KEY="300">
-      <file pinned="false" current-in-tab="false">
+      <file pinned="false" current-in-tab="true">
         <entry file="file://$PROJECT_DIR$/src/Main.py">
           <provider selected="true" editor-type-id="text-editor">
-            <state relative-caret-position="263">
-              <caret line="26" column="82" selection-start-line="26" selection-start-column="82" selection-end-line="26" selection-end-column="82" />
+            <state relative-caret-position="440">
+              <caret line="96" column="18" lean-forward="true" selection-start-line="96" selection-start-column="18" selection-end-line="96" selection-end-column="18" />
               <folding>
                 <element signature="e#0#13#0" expanded="true" />
               </folding>
@@ -31,31 +27,25 @@
         </entry>
       </file>
       <file pinned="false" current-in-tab="false">
-        <entry file="file://$PROJECT_DIR$/lib/python3.7/site-packages/pandas/core/ops/__init__.py">
-          <provider selected="true" editor-type-id="text-editor">
-            <state relative-caret-position="16080">
-              <caret line="1141" selection-start-line="1141" selection-end-line="1141" />
-            </state>
-          </provider>
-        </entry>
-      </file>
-      <file pinned="false" current-in-tab="false">
-        <entry file="file:///usr/local/Cellar/python/3.7.5/Frameworks/Python.framework/Versions/3.7/lib/python3.7/random.py">
-          <provider selected="true" editor-type-id="text-editor">
-            <state relative-caret-position="4605">
-              <caret line="316" selection-start-line="316" selection-end-line="316" />
-            </state>
-          </provider>
-        </entry>
-      </file>
-      <file pinned="false" current-in-tab="true">
         <entry file="file://$PROJECT_DIR$/src/ContentBasedRecommendation.py">
           <provider selected="true" editor-type-id="text-editor">
-            <state relative-caret-position="200">
-              <caret line="96" lean-forward="true" selection-start-line="96" selection-end-line="96" />
+            <state relative-caret-position="87">
+              <caret line="162" column="13" lean-forward="true" selection-start-line="162" selection-start-column="13" selection-end-line="162" selection-end-column="69" />
               <folding>
                 <element signature="e#0#13#0" expanded="true" />
+                <element signature="e#1611#1710#0" />
+                <element signature="e#1780#3486#0" />
+                <element signature="e#3553#5644#0" />
               </folding>
+            </state>
+          </provider>
+        </entry>
+      </file>
+      <file pinned="false" current-in-tab="false">
+        <entry file="file://$PROJECT_DIR$/lib/python3.7/site-packages/pandas/core/frame.py">
+          <provider selected="true" editor-type-id="text-editor">
+            <state relative-caret-position="142">
+              <caret line="3486" selection-start-line="3486" selection-end-line="3486" />
             </state>
           </provider>
         </entry>
@@ -63,8 +53,8 @@
       <file pinned="false" current-in-tab="false">
         <entry file="file://$PROJECT_DIR$/src/user_analysis.py">
           <provider selected="true" editor-type-id="text-editor">
-            <state relative-caret-position="290">
-              <caret line="98" column="148" selection-start-line="98" selection-start-column="148" selection-end-line="98" selection-end-column="148" />
+            <state relative-caret-position="203">
+              <caret line="37" column="38" selection-start-line="37" selection-start-column="26" selection-end-line="37" selection-end-column="38" />
               <folding>
                 <element signature="e#0#31#0" expanded="true" />
               </folding>
@@ -75,8 +65,8 @@
       <file pinned="false" current-in-tab="false">
         <entry file="file://$PROJECT_DIR$/src/Data.py">
           <provider selected="true" editor-type-id="text-editor">
-            <state relative-caret-position="1050">
-              <caret line="78" column="67" selection-start-line="78" selection-start-column="67" selection-end-line="78" selection-end-column="67" />
+            <state relative-caret-position="18">
+              <caret line="84" column="67" selection-start-line="84" selection-start-column="67" selection-end-line="84" selection-end-column="67" />
               <folding>
                 <element signature="e#0#9#0" expanded="true" />
               </folding>
@@ -87,8 +77,8 @@
       <file pinned="false" current-in-tab="false">
         <entry file="file://$PROJECT_DIR$/src/Evalution.py">
           <provider selected="true" editor-type-id="text-editor">
-            <state relative-caret-position="1740">
-              <caret line="124" column="40" selection-start-line="124" selection-start-column="40" selection-end-line="124" selection-end-column="40" />
+            <state relative-caret-position="90">
+              <caret line="12" column="29" lean-forward="true" selection-start-line="12" selection-start-column="29" selection-end-line="12" selection-end-column="29" />
               <folding>
                 <element signature="e#0#12#0" expanded="true" />
               </folding>
@@ -111,7 +101,7 @@
       <file pinned="false" current-in-tab="false">
         <entry file="file://$PROJECT_DIR$/src/game_id_name.csv">
           <provider selected="true" editor-type-id="csv-text-editor">
-            <state relative-caret-position="9180">
+            <state relative-caret-position="486">
               <caret line="612" column="4" selection-start-line="612" selection-start-column="4" selection-end-line="612" selection-end-column="18" />
             </state>
           </provider>
@@ -143,11 +133,6 @@
   </component>
   <component name="FindInProjectRecents">
     <findStrings>
-      <find>self.played_games_info</find>
-      <find>naissancee</find>
-      <find>Majeyal</find>
-      <find>aaaaaa</find>
-      <find>human</find>
       <find>row</find>
       <find />
       <find>portal</find>
@@ -168,11 +153,16 @@
       <find>rot</find>
       <find>counter</find>
       <find>tfidf</find>
-      <find>print</find>
       <find>play</find>
       <find>cloud</find>
-      <find>word</find>
       <find>pri</find>
+      <find>sort</find>
+      <find>Game Name</find>
+      <find>print</find>
+      <find>Game_Name</find>
+      <find>word</find>
+      <find>'Game_Name'</find>
+      <find>duplica</find>
     </findStrings>
     <replaceStrings>
       <replace />
@@ -194,17 +184,17 @@
         <option value="$PROJECT_DIR$/src/playtime.csv" />
         <option value="$PROJECT_DIR$/src/User_Analysis.py" />
         <option value="$PROJECT_DIR$/src/SimilarGamesRecommendation.py" />
-        <option value="$PROJECT_DIR$/src/Data.py" />
         <option value="$PROJECT_DIR$/src/Evalution.py" />
         <option value="$PROJECT_DIR$/src/ContentBasedRecommendation.py" />
         <option value="$PROJECT_DIR$/src/user_analysis.py" />
+        <option value="$PROJECT_DIR$/src/Data.py" />
         <option value="$PROJECT_DIR$/src/Main.py" />
       </list>
     </option>
   </component>
   <component name="ProjectFrameBounds">
     <option name="y" value="23" />
-    <option name="width" value="1440" />
+    <option name="width" value="1423" />
     <option name="height" value="831" />
   </component>
   <component name="ProjectView">
@@ -332,15 +322,15 @@
     <servers />
   </component>
   <component name="ToolWindowManager">
-    <frame x="0" y="23" width="1440" height="831" extended-state="0" />
+    <frame x="0" y="23" width="1423" height="831" extended-state="0" />
     <editor active="true" />
     <layout>
       <window_info content_ui="combo" id="Project" order="0" weight="0.21613833" />
       <window_info id="Structure" order="1" side_tool="true" weight="0.25" />
       <window_info id="Favorites" order="2" side_tool="true" />
       <window_info anchor="bottom" id="Message" order="0" />
-      <window_info anchor="bottom" id="Find" order="1" weight="0.37127373" />
-      <window_info anchor="bottom" id="Run" order="2" weight="0.44925576" />
+      <window_info anchor="bottom" id="Find" order="1" weight="0.37077132" />
+      <window_info active="true" anchor="bottom" id="Run" order="2" visible="true" weight="0.067659" />
       <window_info anchor="bottom" id="Debug" order="3" weight="0.4" />
       <window_info anchor="bottom" id="Cvs" order="4" weight="0.25" />
       <window_info anchor="bottom" id="Inspection" order="5" weight="0.4" />
@@ -404,13 +394,6 @@
       </provider>
     </entry>
     <entry file="file://$PROJECT_DIR$/src/RecommendationOperations.py" />
-    <entry file="file://$PROJECT_DIR$/lib/python3.7/site-packages/pandas/core/ops/__init__.py">
-      <provider selected="true" editor-type-id="text-editor">
-        <state relative-caret-position="16080">
-          <caret line="1141" selection-start-line="1141" selection-end-line="1141" />
-        </state>
-      </provider>
-    </entry>
     <entry file="file:///usr/local/Cellar/python/3.7.5/Frameworks/Python.framework/Versions/3.7/lib/python3.7/random.py">
       <provider selected="true" editor-type-id="text-editor">
         <state relative-caret-position="4605">
@@ -418,40 +401,10 @@
         </state>
       </provider>
     </entry>
-    <entry file="file://$PROJECT_DIR$/src/Data.py">
-      <provider selected="true" editor-type-id="text-editor">
-        <state relative-caret-position="1050">
-          <caret line="78" column="67" selection-start-line="78" selection-start-column="67" selection-end-line="78" selection-end-column="67" />
-          <folding>
-            <element signature="e#0#9#0" expanded="true" />
-          </folding>
-        </state>
-      </provider>
-    </entry>
-    <entry file="file://$PROJECT_DIR$/src/Evalution.py">
-      <provider selected="true" editor-type-id="text-editor">
-        <state relative-caret-position="1740">
-          <caret line="124" column="40" selection-start-line="124" selection-start-column="40" selection-end-line="124" selection-end-column="40" />
-          <folding>
-            <element signature="e#0#12#0" expanded="true" />
-          </folding>
-        </state>
-      </provider>
-    </entry>
     <entry file="file://$PROJECT_DIR$/src/app_list.csv">
       <provider selected="true" editor-type-id="csv-text-editor">
         <state relative-caret-position="19635">
           <caret line="1309" column="11" selection-start-line="1309" selection-start-column="5" selection-end-line="1309" selection-end-column="11" />
-        </state>
-      </provider>
-      <provider editor-type-id="csv-table-editor">
-        <state showInfoPanel="true" fixedHeaders="false" rowLines="3" />
-      </provider>
-    </entry>
-    <entry file="file://$PROJECT_DIR$/src/game_id_name.csv">
-      <provider selected="true" editor-type-id="csv-text-editor">
-        <state relative-caret-position="9180">
-          <caret line="612" column="4" selection-start-line="612" selection-start-column="4" selection-end-line="612" selection-end-column="18" />
         </state>
       </provider>
       <provider editor-type-id="csv-table-editor">
@@ -468,30 +421,77 @@
         <state showInfoPanel="true" fixedHeaders="false" rowLines="3" />
       </provider>
     </entry>
-    <entry file="file://$PROJECT_DIR$/src/user_analysis.py">
+    <entry file="file://$PROJECT_DIR$/lib/python3.7/site-packages/pandas/core/ops/__init__.py">
       <provider selected="true" editor-type-id="text-editor">
-        <state relative-caret-position="290">
-          <caret line="98" column="148" selection-start-line="98" selection-start-column="148" selection-end-line="98" selection-end-column="148" />
-          <folding>
-            <element signature="e#0#31#0" expanded="true" />
-          </folding>
+        <state relative-caret-position="167">
+          <caret line="1141" selection-start-line="1141" selection-end-line="1141" />
         </state>
       </provider>
     </entry>
-    <entry file="file://$PROJECT_DIR$/src/Main.py">
+    <entry file="file://$PROJECT_DIR$/lib/python3.7/site-packages/pandas/core/frame.py">
       <provider selected="true" editor-type-id="text-editor">
-        <state relative-caret-position="263">
-          <caret line="26" column="82" selection-start-line="26" selection-start-column="82" selection-end-line="26" selection-end-column="82" />
+        <state relative-caret-position="142">
+          <caret line="3486" selection-start-line="3486" selection-end-line="3486" />
+        </state>
+      </provider>
+    </entry>
+    <entry file="file://$PROJECT_DIR$/src/Evalution.py">
+      <provider selected="true" editor-type-id="text-editor">
+        <state relative-caret-position="90">
+          <caret line="12" column="29" lean-forward="true" selection-start-line="12" selection-start-column="29" selection-end-line="12" selection-end-column="29" />
           <folding>
-            <element signature="e#0#13#0" expanded="true" />
+            <element signature="e#0#12#0" expanded="true" />
           </folding>
         </state>
       </provider>
     </entry>
     <entry file="file://$PROJECT_DIR$/src/ContentBasedRecommendation.py">
       <provider selected="true" editor-type-id="text-editor">
-        <state relative-caret-position="200">
-          <caret line="96" lean-forward="true" selection-start-line="96" selection-end-line="96" />
+        <state relative-caret-position="87">
+          <caret line="162" column="13" lean-forward="true" selection-start-line="162" selection-start-column="13" selection-end-line="162" selection-end-column="69" />
+          <folding>
+            <element signature="e#0#13#0" expanded="true" />
+            <element signature="e#1611#1710#0" />
+            <element signature="e#1780#3486#0" />
+            <element signature="e#3553#5644#0" />
+          </folding>
+        </state>
+      </provider>
+    </entry>
+    <entry file="file://$PROJECT_DIR$/src/user_analysis.py">
+      <provider selected="true" editor-type-id="text-editor">
+        <state relative-caret-position="203">
+          <caret line="37" column="38" selection-start-line="37" selection-start-column="26" selection-end-line="37" selection-end-column="38" />
+          <folding>
+            <element signature="e#0#31#0" expanded="true" />
+          </folding>
+        </state>
+      </provider>
+    </entry>
+    <entry file="file://$PROJECT_DIR$/src/game_id_name.csv">
+      <provider selected="true" editor-type-id="csv-text-editor">
+        <state relative-caret-position="486">
+          <caret line="612" column="4" selection-start-line="612" selection-start-column="4" selection-end-line="612" selection-end-column="18" />
+        </state>
+      </provider>
+      <provider editor-type-id="csv-table-editor">
+        <state showInfoPanel="true" fixedHeaders="false" rowLines="3" />
+      </provider>
+    </entry>
+    <entry file="file://$PROJECT_DIR$/src/Data.py">
+      <provider selected="true" editor-type-id="text-editor">
+        <state relative-caret-position="18">
+          <caret line="84" column="67" selection-start-line="84" selection-start-column="67" selection-end-line="84" selection-end-column="67" />
+          <folding>
+            <element signature="e#0#9#0" expanded="true" />
+          </folding>
+        </state>
+      </provider>
+    </entry>
+    <entry file="file://$PROJECT_DIR$/src/Main.py">
+      <provider selected="true" editor-type-id="text-editor">
+        <state relative-caret-position="440">
+          <caret line="96" column="18" lean-forward="true" selection-start-line="96" selection-start-column="18" selection-end-line="96" selection-end-column="18" />
           <folding>
             <element signature="e#0#13#0" expanded="true" />
           </folding>

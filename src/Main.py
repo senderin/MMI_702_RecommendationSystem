@@ -16,8 +16,8 @@ def get_rec_for(game_name, metadata_name):
         cb_ids, cb_names = content_based_rec.recommend_for_game(game_name, metadata_name)
 
     else:
-        played_games = data.played_games.loc[data.played_games['Game_Name'] == game_name]
-        cb_ids, cb_names = content_based_rec.recommend_with_all_metadata(played_games)
+        played_game = data.played_games.loc[data.played_games['Game_Name'] == game_name]
+        cb_ids, cb_names = content_based_rec.recommend_with_all_metadata(played_game)
 
     return cb_ids ,cb_names
 
@@ -51,33 +51,56 @@ evaluation = Evaluation()
 data = Data.get_instance()
 content_based_rec = ContentBasedRecommendation()
 
-#user_id = 1
-user_id = numpy.random.choice(data.users_games['User_ID'].unique())
+user_id = 1
+#user_id = numpy.random.choice(data.users_games['User_ID'].unique())
 print("RECOMMENDATION FOR USER ID-{0}".format(user_id))
 user_analysis = User_Analysis(user_id)
 user_analysis.user_profile_description()
 
-most_played_3_games = user_analysis.get_most_played_N_games(3)
-pool = pd.DataFrame()
-for index, row in most_played_3_games.iterrows():
-    print("Game Name: {0}".format(row['Game_Name']))
-    if len(pool) == 0:
-        pool = rec_for_game(row['Game_Name']).head(4)
-    else:
-        pool = pool.append(rec_for_game(row['Game_Name']).head(3))
-print("Size of the pool: {0}".format(len(pool)))
+temp = pd.DataFrame()
+temp['name'] = user_analysis.get_actual_name_list()
+print("All played games:")
+print(temp)
 
-predictions = pd.DataFrame()
-if not len(pool) == 0:
-    predictions = pool.sample(10);
-else:
-    predictions = [0] * 10
-print("Recommendation of the Models:")
-print(predictions.head(10))
+most_played_3_games = user_analysis.get_most_played_N_games(3)
+print(most_played_3_games['Game_Name'])
+
+pool = pd.DataFrame()
+#for index, row in most_played_3_games.iterrows():
+#    print("Game Name: {0}".format(row['Game_Name']))
+#    if len(pool) == 0:
+#        pool = rec_for_game(row['Game_Name']).head(4)
+#    else:
+#        pool = pool.append(rec_for_game(row['Game_Name']).head(3))
+#print("Size of the pool: {0}".format(len(pool)))
+
+cb_name = content_based_rec.recommend_for_gameset(most_played_3_games, 'Game_Name')
+cb_short_desc = content_based_rec.recommend_for_gameset(most_played_3_games, 'short_description')
+cb_detailed_desc = content_based_rec.recommend_for_gameset(most_played_3_games, 'detailed_description')
+cb_about = content_based_rec.recommend_for_gameset(most_played_3_games, 'about_the_game')
+cb_all = content_based_rec.recommend_all_metadata(most_played_3_games)
+
+
+temp = pd.DataFrame()
+temp['Name_Game_Name'] = cb_name['name'].values.tolist()
+temp['Name_short_description'] = cb_short_desc['name'].values.tolist()
+temp['Name_detailed_description'] = cb_detailed_desc['name'].values.tolist()
+temp['Name_about_the_game'] = cb_about['name'].values.tolist()
+temp['Name_all_metadata'] = cb_all['name'].values.tolist()
+temp['Ids_Game_Name'] = cb_name['id'].values.tolist()
+temp['Ids_short_description'] = cb_short_desc['id'].values.tolist()
+temp['Ids_detailed_description'] = cb_detailed_desc['id'].values.tolist()
+temp['Ids_about_the_game'] = cb_about['id'].values.tolist()
+temp['Ids_all_metadata'] = cb_all['id'].values.tolist()
+
+predictions = temp;
+print(predictions)
 
 precisions = []
 recalls = []
 actual = user_analysis.get_actual_id_list()
+print(len(actual))
+actual = [x for x in actual if x not in most_played_3_games['Game_ID'].values.tolist()]
 
 print('For cb rec. model (game_name): ')
 p, r = evaluation.precision_recall(actual, predictions['Ids_Game_Name'])
